@@ -1,0 +1,646 @@
+
+import datetime  # Import the datetime module to work with date and time.
+from tabulate import tabulate
+
+
+class Hospital:
+    """
+    This class represents a hospital and its associated classes for managing personnel and patients.
+    """
+
+    class Person:
+        """
+        Represents a generic person with basic personal information.
+        """
+
+        def __init__(self):
+            self._name = None
+            self._emiratesId = None
+            self._cellPhone = None
+            self._insurance = None
+            self._dateofbirth = None
+
+        def set_person_info(self, fullname, emirates_id, phone, insurance, dateofbirth):
+            """
+            Set the personal information of a person.
+
+            Args:
+                fullname (str): The full name of the person.
+                emirates_id (str): The Emirates ID of the person.
+                phone (str): The phone number of the person.
+                insurance (str): The type of insurance (None, Gold, Platinum) of the person.
+                dateofbirth (str): The date of birth of the person in "YYYY-MM-DD" format.
+            """
+            self._name = fullname
+            self._emiratesId = emirates_id
+            self._cellPhone = phone
+            self._insurance = insurance
+            self._dateofbirth = dateofbirth if dateofbirth is not None else datetime.date.today()
+
+        def get_person_info(self):
+            """
+            Get the personal information of a person.
+
+            Returns:
+                tuple: A tuple containing personal information (name, Emirates ID, phone, insurance, date of birth).
+            """
+            return self._name, self._emiratesId, self._cellPhone, self._insurance, self._dateofbirth
+
+        def display_person_info(self):
+            """
+            Generate a formatted string representing a person's information.
+
+            Returns:
+                str: A formatted string containing the person's information.
+            """
+            return f'Full Name {self._name}, Emirates ID: {self._emiratesId}, Phone: {self._cellPhone}, ' \
+                   f'Insurance: {self._insurance}, Date Of Birth: {self._dateofbirth}'
+
+        def __str__(self):
+            """
+            Generate a string representation of a person.
+
+            Returns:
+                str: A string containing the person's information.
+            """
+            return f'Full Name {str(self._name)}, ID: {str(self._emiratesId)}, Phone: {str(self._cellPhone)}, ' \
+                   f'Insurance: {str(self._insurance)}, Date Of Birth: {str(self._dateofbirth)}'
+
+    class Employee(Person):
+        """
+        Represents an employee of the hospital with additional department and room information.
+        """
+
+        def __init__(self):
+            super().__init__()
+            self._department = ""
+            self._room = ""
+
+        def set_employee_info(self, fullname, emirates_id, phone, insurance, dateofbirth, department, room):
+            """
+            Set the information of an employee, including personal information, department, and room.
+
+            Args:
+                fullname (str): The full name of the employee.
+                emirates_id (str): The Emirates ID of the employee.
+                phone (str): The phone number of the employee.
+                insurance (str): The type of insurance (None, Gold, Platinum) of the employee.
+                dateofbirth (str): The date of birth of the employee in "YYYY-MM-DD" format.
+                department (str): The department where the employee works.
+                room (str): The room where the employee is assigned.
+            """
+            super().set_person_info(fullname, emirates_id, phone, insurance, dateofbirth)
+            self._department = department
+            self._room = room
+
+        def get_employee_info(self):
+            """
+            Get the employee information, including personal information, department, and room.
+
+            Returns:
+                tuple: A tuple containing personal information and employee-specific details
+                       (name, Emirates ID, phone, insurance, date of birth, department, room).
+            """
+            return super().display_person_info(), self._department, self._room
+
+        def display_employee_info(self):
+            """
+            Generate a formatted string representing an employee's information.
+
+            Returns:
+                str: A formatted string containing the employee's information.
+            """
+            return f'{super().display_person_info()}, Department: {self._department}, Room: {self._room}'
+
+        def __str__(self):
+            """
+            Generate a string representation of an employee.
+
+            Returns:
+                str: A string containing the employee's information.
+            """
+            person_info, department, room = self.get_employee_info()
+            return f'{str(person_info)}, Department: {str(department)}, Room: {str(room)}'
+
+    class Doctor(Employee):
+        """
+        Represents a doctor with additional information about their medical field.
+        """
+
+        def __init__(self):
+            super().__init__()
+            self._doctor_field = ""
+
+        def set_doctor_info(self, fullname, emirates_id, phone, insurance, dateofbirth, department, room, doctor_field):
+            """
+            Set the information of a doctor, including personal information, department, room, and medical field.
+
+            Args:
+                fullname (str): The full name of the doctor.
+                emirates_id (str): The Emirates ID of the doctor.
+                phone (str): The phone number of the doctor.
+                insurance (str): The type of insurance (None, Gold, Platinum) of the doctor.
+                dateofbirth (str): The date of birth of the doctor in "YYYY-MM-DD" format.
+                department (str): The department where the doctor works.
+                room (str): The room where the doctor is assigned.
+                doctor_field (str): The medical field of the doctor.
+            """
+            super().set_employee_info(fullname, emirates_id, phone, insurance, dateofbirth, department, room)
+            self._doctor_field = doctor_field
+
+        def input_doct_info(self):
+            """
+            Prompt the user to input information about a doctor.
+            """
+            fullname = input("Enter Doctor's Full Name: ")
+            emirates_id = input("Enter Doctor's Emirates ID: ")
+            phone = input("Enter Doctor's Phone number: ")
+            insurance = input("Enter Doctor's Insurance type (None/Gold/Platinum): ")
+            dateofbirth = input("Enter Doctor's Date of Birth (YYYY-MM-DD): ")
+            department = input("Enter Doctor's Department: ")
+            room = input("Enter Doctor's Operating Room: ")
+            doctor_field = input("Enter Doctor's Field: ")
+
+            self.set_doctor_info(fullname, emirates_id, phone, insurance, dateofbirth, department, room, doctor_field)
+
+        def get_doctor_info(self):
+            """
+            Get the doctor's information, including personal information, department, room, and medical field.
+
+            Returns:
+                tuple: A tuple containing doctor's information (name, Emirates ID, phone, insurance, date of birth,
+                       department, room, doctor field).
+            """
+            return super().get_employee_info(), self._doctor_field
+
+        def display_doctor_info(self):
+            """
+            Generate a formatted string representing a doctor's information.
+
+            Returns:
+                str: A formatted string containing the doctor's information.
+            """
+            return f'{super().display_employee_info()}, Doctor Field: {self._doctor_field}'
+
+        def __str__(self):
+            """
+            Generate a string representation of a doctor.
+
+            Returns:
+                str: A string containing the doctor's information.
+            """
+            return f'{str(super().display_employee_info())}, Doctor Field: {str(self._doctor_field)}'
+
+    class Nurse(Employee):
+        """
+        Represents a nurse with additional information about their field of work.
+        """
+
+        def __init__(self):
+            super().__init__()
+            self._nurse_work = ""
+
+        def set_nurse_info(self, fullname, emirates_id, phone, insurance, dateofbirth, department, room, nurse_work):
+            """
+            Set the information of a nurse, including personal information, department, room, and nurse field.
+
+            Args:
+                fullname (str): The full name of the nurse.
+                emirates_id (str): The Emirates ID of the nurse.
+                phone (str): The phone number of the nurse.
+                insurance (str): The type of insurance (None, Gold, Platinum) of the nurse.
+                dateofbirth (str): The date of birth of the nurse in "YYYY-MM-DD" format.
+                department (str): The department where the nurse works.
+                room (str): The room where the nurse is assigned.
+                nurse_work (str): The field of work for the nurse.
+            """
+            super().set_employee_info(fullname, emirates_id, phone, insurance, dateofbirth, department, room)
+            self._nurse_work = nurse_work
+
+        def input_nurse_info(self):
+            """
+            Prompt the user to input information about a nurse.
+            """
+            fullname = input("Enter Nurse's Full Name: ")
+            emirates_id = input("Enter Nurse's Emirates ID: ")
+            phone = input("Enter Nurse's Phone number: ")
+            insurance = input("Enter Nurse's Insurance type (None/Gold/Platinum): ")
+            dateofbirth = input("Enter Nurse's Date of Birth (YYYY-MM-DD): ")
+            department = input("Enter Nurse's Department: ")
+            room = input("Enter Nurse's Operating Room: ")
+            nurse_work = input("Enter Nurse's Field: ")
+
+            self.set_nurse_info(fullname, emirates_id, phone, insurance, dateofbirth, department, room, nurse_work)
+
+        def get_nurse_info(self):
+            """
+            Get the nurse's information, including personal information, department, room, and nurse field.
+
+            Returns:
+                tuple: A tuple containing nurse's information (name, Emirates ID, phone, insurance, date of birth,
+                       department, room, nurse field).
+            """
+            return super().get_employee_info(), self._nurse_work
+
+        def display_nurse_info(self):
+            """
+            Generate a formatted string representing a nurse's information.
+
+            Returns:
+                str: A formatted string containing the nurse's information.
+            """
+            return f'{super().display_employee_info()}, Nurse Field: {self._nurse_work}'
+
+        def __str__(self):
+            """
+            Generate a string representation of a nurse.
+
+            Returns:
+                str: A string containing the nurse's information.
+            """
+            return f'{str(super().display_employee_info())}, Nurse Field: {str(self._nurse_work)}'
+
+    class Patient(Person):
+        """
+        Represents a patient with information about their visit and medical history.
+        """
+
+        def __init__(self):
+            super().__init__()
+            self._visit = None
+            self._arriving = None
+            self._disease = None
+            self._checkout = None
+            self.patient_file = {}
+
+        def set_patient_info(self, fullname, emirates_id, phone, insurance, dateofbirth, visit, arriving, disease,
+                             checkout):
+            """
+            Set the information of a patient, including personal information, visit details, and medical history.
+
+            Args:
+                fullname (str): The full name of the patient.
+                emirates_id (str): The Emirates ID of the patient.
+                phone (str): The phone number of the patient.
+                insurance (str): The type of insurance (None, Gold, Platinum) of the patient.
+                dateofbirth (str): The date of birth of the patient in "YYYY-MM-DD" format.
+                visit (str): The reason for the patient's visit.
+                arriving (str): The date and time of the patient's arrival in "YYYY-MM-DD HH:MM:SS" format.
+                disease (str): Description of the patient's disease.
+                checkout (str): The date and time of the patient's checkout in "YYYY-MM-DD HH:MM:SS" format.
+            """
+            patient_dict = self.patient_file
+            if emirates_id in patient_dict:
+                existing_patient_info = patient_dict[emirates_id]["patient_info"]
+                print(f"Patient already exists:\n{existing_patient_info}")
+            else:
+                super().set_person_info(fullname, emirates_id, phone, insurance, dateofbirth)
+                self._visit = visit
+                self._arriving = arriving if arriving is not None else datetime.datetime.now()
+                self._disease = disease
+                self._checkout = checkout if checkout is not None else datetime.datetime.now()
+
+                patient_number = len(patient_dict) + 1
+
+                patient_dict[emirates_id] = {
+                    "patient_number": patient_number,
+                    "patient_info": self.get_patient_info()
+                }
+
+        def input_patient_info():
+            """
+            Prompt the user to input information about a patient.
+
+            Returns:
+                tuple: A tuple containing patient information (name, Emirates ID, phone, insurance, date of birth, visit,
+                       arriving, disease, checkout).
+            """
+            fullname = input("Enter Patient's Full Name: ")
+            emirates_id = input("Enter Patient's Emirates ID: ")
+            phone = input("Enter Patient's Phone Number: ")
+            insurance = input("Enter Patient's Insurance Type (None/Gold/Platinum): ")
+            dateofbirth = input("Enter Patient's Date of Birth (YYYY-MM-DD): ")
+            visit = input("Enter Patient's Visit Reason: ")
+            arriving = input("Enter Patient's Arriving Date and Time (YYYY-MM-DD HH:MM:SS): ")
+            disease = input("Enter Patient's Disease Description: ")
+            checkout = input("Enter Patient's Checkout Date and Time (YYYY-MM-DD HH:MM:SS): ")
+
+            try:
+                arriving = datetime.datetime.strptime(arriving, "%Y-%m-%d %H:%M:%S")
+            except ValueError:
+                arriving = datetime.datetime.now()
+
+            try:
+                checkout = datetime.datetime.strptime(checkout, "%Y-%m-%d %H:%M:%S")
+            except ValueError:
+                checkout = datetime.datetime.now()
+
+            return fullname, emirates_id, phone, insurance, dateofbirth, visit, arriving, disease, checkout
+
+        def get_patient_info(self):
+            """
+            Get the patient's information, including personal information, visit details, and medical history.
+
+            Returns:
+                tuple: A tuple containing patient information (name, Emirates ID, phone, insurance, date of birth, visit,
+                       arriving, disease, checkout).
+            """
+            return (
+                super().get_person_info(),
+                self._visit,
+                self._arriving,
+                self._disease,
+                self._checkout
+            )
+
+        def display_patient_info(self):
+            """
+            Generate a formatted string representing a patient's information.
+
+            Returns:
+                str: A formatted string containing the patient's information.
+            """
+            return f"{super().display_person_info()}, Visit: {self._visit}, Arriving: {self._arriving}, " \
+                   f"Sickness: {self._disease}, Checkout: {self._checkout}"
+
+        def __str__(self):
+            """
+            Generate a string representation of a patient.
+
+            Returns:
+                str: A string containing the patient's information.
+            """
+            return self.display_patient_info()
+
+    class MedicalBilling(Patient):
+        """
+        Represents a patient's medical billing information.
+        """
+
+        def __init__(self):
+            super().__init__()
+            self._doctor = Hospital.Doctor()  # Initialize doctor to None initially
+            self._nurse = Hospital.Nurse()  # Initialize nurse to None initially
+            self._doctor_Consultation = 0
+            self._nursing_Services = 0
+            self._hospital_Charges = 0
+            self._pharmacy = 0
+            self._room_charges = 0
+            self._tax = 0
+            self._insurance_Cover = None
+
+        def input_medical_billing(self):
+            """
+            Prompt the user to input medical billing information for a patient.
+            """
+            fullname = input("Enter Patient Last Name: ")
+            emirates_id = input("Enter Patient Emirates ID: ")
+            phone = input("Enter Patient Phone number: ")
+            insurance = input("Enter Patient Insurance type (None/Gold/Platinum): ")
+            date_of_birth = input("Enter Patient Date of Birth (YYYY-MM-DD): ")
+            arriving = input("Enter Patient arriving date and time (YYYY-MM-DD HH:MM:SS): ")
+            visit = input("Enter Patient visit reason: ")
+            disease = input("Enter Patient disease description: ")
+            checkout = input("Enter Patient checkout date and time (YYYY-MM-DD HH:MM:SS): ")
+            consultation = float(input("Enter Patient consultation charges: "))
+            n_service = float(input("Enter Patient nursing services charges: "))
+            hospital_charges = float(input("Enter Patient hospital charges: "))
+            pharmacy = float(input("Enter Patient pharmacy charges: "))
+            room_charges = float(input("Enter Patient room charges: "))
+            tax_charge = float(input("Enter tax rate (e.g., 0.05 for 5%): "))
+
+            self.set_medicalbilling_info(
+                fullname, emirates_id, phone, insurance,
+                date_of_birth, arriving, visit, disease, checkout,
+                consultation, n_service, hospital_charges, pharmacy, room_charges, tax_charge
+            )
+
+        def get_insurance_cover(self):
+            """
+            Get the insurance coverage type of the patient.
+
+            Returns:
+                str: The type of insurance coverage (None, Gold, Platinum).
+            """
+            _, _, _, insurance, _ = super().get_person_info()
+            return insurance
+
+        def set_medicalbilling_info(self, fullname, emirates_id, phone,
+                                    insurance, date_of_birth, arriving, visit, disease, checkout, doctor1, nurse1,
+                                    consultation,
+                                    n_service,
+                                    hospital_charges, pharmacy, room_charges, tax_charge):
+            """
+            Set the medical billing information for a patient.
+
+            Args:
+                fullname (str): The full name of the patient.
+                emirates_id (str): The Emirates ID of the patient.
+                phone (str): The phone number of the patient.
+                insurance (str): The type of insurance (None, Gold, Platinum) of the patient.
+                date_of_birth (str): The date of birth of the patient in "YYYY-MM-DD" format.
+                arriving (str): The date and time of the patient's arrival in "YYYY-MM-DD HH:MM:SS" format.
+                visit (str): The reason for the patient's visit.
+                disease (str): Description of the patient's disease.
+                checkout (str): The date and time of the patient's checkout in "YYYY-MM-DD HH:MM:SS" format.
+                doctor1 (Doctor): The doctor assigned to the patient.
+                nurse1 (Nurse): The nurse assigned to the patient.
+                consultation (float): The consultation charges for the patient.
+                n_service (float): The nursing services charges for the patient.
+                hospital_charges (float): The hospital charges for the patient.
+                pharmacy (float): The pharmacy charges for the patient.
+                room_charges (float): The room charges for the patient.
+                tax_charge (float): The tax rate (e.g., 0.05 for 5%) for the patient's bill.
+            """
+            super().set_patient_info(fullname, emirates_id, phone, insurance, date_of_birth, visit, arriving, disease,
+                                     checkout)
+            self._doctor = doctor1
+            self._nurse = nurse1
+            self.__doctor_Consultation = consultation
+            self.__nursing_Services = n_service
+            self.__hospital_Charges = hospital_charges
+            self.__pharmacy = pharmacy
+            self.__room_charges = room_charges
+            self.__tax = tax_charge
+            self.__insurance_Cover = self.get_insurance_cover()
+
+        def display_medicalbilling_info(self):
+            """
+            Generate a formatted string representing a patient's medical billing information.
+
+            Returns:
+                str: A formatted string containing the patient's medical billing information.
+            """
+            patient_info = super().display_patient_info()
+            doctor_info = str(self._doctor)
+            nurse_info = str(self._nurse)
+            consultation_charge = self._doctor_Consultation
+            nursing_services_charge = self._nursing_Services
+            hospital_charge = self._hospital_Charges
+            pharmacy_charge = self._pharmacy
+            room_charge = self._room_charges
+            tax_rate = self._tax
+
+            total_charges = (
+                    consultation_charge + nursing_services_charge + hospital_charge +
+                    pharmacy_charge + room_charge
+            )
+
+            # Determine coverage based on insurance type
+            if self._insurance_Cover == "Platinum":
+                total_charges = 0  # Full coverage, no charges
+                self._insurance_Cover = "Full"
+            elif self._insurance_Cover == "Gold":
+                total_charges *= 0.5  # Half coverage, 50% of billing charges
+                self._insurance_Cover = "Half"
+            elif self._insurance_Cover == "None":
+                tax_amount = total_charges * self.__tax
+                total_charges += tax_amount
+                self._insurance_Cover = "None"
+
+            doctor_info = self._doctor.display_doctor_info()
+            name_start_index = doctor_info.find("Full Name ") + len("Full Name ")
+            name_end_index = doctor_info.find(", Emirates ID:")
+            doctor_name = doctor_info[name_start_index:name_end_index]
+
+            nurse_info = self._nurse.display_nurse_info()
+            name_start_indexn = nurse_info.find("Full Name ") + len("Full Name ")
+            name_end_indexn = doctor_info.find(", Emirates ID:")
+            nurse_name = nurse_info[name_start_indexn:name_end_indexn]
+
+            # Create a table with the medical billing information
+            table = [
+                ["Patient Info", "Doctor Info", "Nurse Info", "Consultation Charge (AED)",
+                 "Nursing Services Charge (AED)",
+                 "Hospital Charge (AED)", "Pharmacy Charge (AED)", "Room Charge (AED)", "Tax", "Insurance Coverage",
+                 "Total Charges (AED)"],
+                [super().display_patient_info(), doctor_name, nurse_name,
+                 consultation_charge, nursing_services_charge, hospital_charge, pharmacy_charge, room_charge,
+                 self.__tax,
+                 self.__insurance_Cover, total_charges]
+            ]
+
+            # Format the table using tabulate
+            table_str = tabulate(table, headers="firstrow", tablefmt="grid")
+
+            return f"{patient_info}\n{table_str}"
+
+        def __str__(self):
+            """
+            Generate a string representation of a patient's medical billing information.
+
+            Returns:
+                str: A string containing the patient's medical billing information.
+            """
+            return self.display_medicalbilling_info()
+# Create instances of Hospital classes
+hospital = Hospital()
+doctor = Hospital.Doctor()
+nurse = Hospital.Nurse()
+patient = Hospital.Patient()
+medical_billing = Hospital.MedicalBilling()
+
+# Create instances of Hospital classes
+hospital = Hospital()
+
+# Create a Doctor instance
+doctor.set_doctor_info("Dr. John Doe", "1234567890", "555-555-5555", "Gold", "1980-01-01", "Cardiology", "Room 101",
+                       "Cardiologist")
+
+# Create a Nurse instance
+nurse.set_nurse_info("Nurse Jane Smith", "9876543210", "555-123-4567", "Platinum", "1990-05-15", "Emergency",
+                     "Room 201", "Emergency Nurse")
+
+# Create a Patient instance
+patient.set_patient_info("Alice Johnson", "111122223333", "555-789-1234", "None", "1995-12-30", "Checkup",
+                         "2023-10-08 08:30:00", "Fever", "2023-10-08 10:45:00")
+
+# Create a MedicalBilling instance
+medical_billing.set_medicalbilling_info("Bob Williams", "444455556666", "555-987-6543", "Platinum", "1988-06-20",
+                                        "Surgery", "2023-10-08 12:00:00", "Appendectomy", "2023-10-08 14:30:00", doctor,
+                                        nurse, 300.0, 150.0, 1000.0, 200.0, 500.0, 0.05)
+
+# Display information
+print("Doctor Information:")
+print(doctor)
+
+print("\nNurse Information:")
+print(nurse)
+
+print("\nPatient Information:")
+print(patient)
+
+print("\nMedical Billing Information:")
+print(medical_billing.display_medicalbilling_info())
+hospital = Hospital()
+
+# Create a Person object
+person1 = hospital.Person()
+
+# Set personal information for person1 using the set_person_info method
+person1.set_person_info("John Doe", "1234567890", "555-555-5555", "Gold", "1980-01-01")
+
+# Get personal information for person1 using the get_person_info method
+info1 = person1.get_person_info()
+
+# Display information about person1 using the display_person_info method
+print("Information about Person 1:")
+print(person1.display_person_info())
+
+# Display information about person1 using the __str__ method
+print("\nInformation about Person 1 (Using __str__ method):")
+print(person1)
+
+# Create an Employee object
+employee1 = Hospital.Employee()
+
+# Set the information for the employee
+employee1.set_employee_info(
+    "John Smith",
+    "1234567890",
+    "555-555-5555",
+    "Gold",
+    "1985-05-15",
+    "Cardiology",
+    "Room 101"
+)
+
+# Get the employee information using the get_employee_info method
+employee_info = employee1.get_employee_info()
+print(employee_info)
+# Create a Doctor object
+doctor1 = Hospital.Doctor()
+
+# Use the input_doct_info method to input information about the doctor
+doctor1.input_doct_info()
+
+# Use the display_doctor_info method to display the doctor's information
+print("\nDoctor Information:")
+print(doctor1.display_doctor_info())
+
+# Use the get_doctor_info method to get and display the doctor's information
+doctor_info = doctor1.get_doctor_info()
+print("\nDoctor Information (Tuple):")
+print(doctor_info)
+
+# Use the __str__ method to get a string representation of the doctor
+print("\nDoctor String Representation:")
+print(str(doctor1))
+
+nurse1 = Hospital.Doctor()
+
+# Use the input_doct_info method to input information about the doctor
+nurse1.input_doct_info()
+
+# Use the display_doctor_info method to display the doctor's information
+print("\nDoctor Information:")
+print(doctor1.display_nurse_info())
+
+# Use the get_doctor_info method to get and display the doctor's information
+doctor_info = doctor1.get_nurse_info()
+print("\nDoctor Information (Tuple):")
+print(doctor_info)
+
+# Use the __str__ method to get a string representation of the doctor
+print("\nDoctor String Representation:")
+print(str(nurse1))
